@@ -96,16 +96,19 @@ class DoctorGateWay {
     }
   }
 
-  public function delete($user_id)
+  public function delete($ci)
   {
     $statement = "
-      DELETE FROM User
-      WHERE id = :user_id;
+      DELETE u 
+      FROM Doctor d
+        JOIN User u
+          ON d.user_id = u.id
+      WHERE d.ci = :ci;
     ";
 
     try {
       $statement = $this->db->prepare($statement);
-      $statement->execute(array('user_id' => $user_id));
+      $statement->execute(array('ci' => $ci));
       return $statement->rowCount();
     } catch (\PDOException $e) {
       exit($e->getMessage());
