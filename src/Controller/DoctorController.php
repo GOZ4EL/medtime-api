@@ -78,10 +78,70 @@ class DoctorController {
     if (! $this->validateDoctor($input)) {
       return Utils::unprocessableEntityResponse();
     }
-    $this->doctor_gateway->insert($input);
+    $user_id = $this->createUser($input);
+
+    $doctor_input = array(
+      'ci' => $input['ci'],
+      'firstname' => $input['firstname'],
+      'lastname' => $input['lastname'],
+      'starts_at' => $input['starts_at'],
+      'ends_at' => $input['ends_at'],
+      'cost' => $input['cos'],
+    );
+
+    $this->doctor_gateway->insert($doctor_input, $user_id);
     $response['status_code_header'] = 'HTTP/1.1 201 Created';
     $response['body'] = null;
     return $response;
+  }
+
+  private function createUser(Array $input): Int
+  {
+    $user_input = array(
+      'email' => $input['email'],
+      'role' => $input['role'],
+      'password' => $input['password'],
+    );
+
+    return $this->user_gateway->insert($user_input);
+  }
+
+  private function validateDoctor(Array $input): Bool
+  {
+    if (! isset($input['email']) || 
+        ! filter_var($input['email'], FILTER_VALIDATE_EMAIL)) {
+      return false;
+    }
+    if (! isset($input['password']) || 
+        strlen($input['password']) < 8) {
+      return false;
+    }
+    if (! isset($input['role']) || 
+        strtolower($input['role']) !== 'doctor') {
+      return false;
+    }
+    if (! isset($input['ci']) ||
+        strlen($input['ci']) < 5 ||
+        ! empty($this->doctor_gateway->find($input['ci']))) {
+      return false;
+    }
+    if (! isset($input['firstname'])) {
+      return false;
+    }
+    if (! isset($input['lastname'])) {
+      return false;
+    }
+    if (! isset($input['starts_at'])) {
+      return false;
+    }
+    if (! isset($input['ends_at'])) {
+      return false;
+    }
+    if (! isset($input['cost'])) {
+      return false;
+    }
+
+    return true;
   }
 }
 
