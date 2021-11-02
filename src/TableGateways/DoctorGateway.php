@@ -45,7 +45,7 @@ class DoctorGateWay {
   {
     $statement = "
       INSERT INTO Doctor
-        (ci, , user_id, firstname, lastname, starts_at, ends_at, cost)
+        (ci, user_id, firstname, lastname, starts_at, ends_at, cost)
       VALUES
         (:ci, :user_id, :firstname, :lastname, :starts_at, :ends_at, :cost);
     ";
@@ -85,9 +85,9 @@ class DoctorGateWay {
       $statement->execute(array(
         'ci' => (int) $ci,
         'firstname' => $input['firstname'] ?? null,
-        'lastname' => $input['lastname'] ?? null,,
-        'starts_at' => $input['starts_at'] ?? null,,
-        'ends_at' => $input['ends_at'] ?? null,,
+        'lastname' => $input['lastname'] ?? null,
+        'starts_at' => $input['starts_at'] ?? null,
+        'ends_at' => $input['ends_at'] ?? null,
         'cost' => $input['cost'] ?? null,
       ));
       return $statement->rowCount();
