@@ -2,8 +2,8 @@
 namespace Src\Controller;
 
 use Src\Utils\Utils;
-use Src\TableGateways\UserGateway;
 use Src\TableGateways\DoctorGateWay;
+use Src\Controller\UserController;
 
 class DoctorController {
   
@@ -11,7 +11,7 @@ class DoctorController {
   private $request_method;
   private $doctor_ci;
   
-  private $user_gateway;
+  private $user_controller;
   private $doctor_gateway;
 
   public function __construct(\PDO $db, $request_method, $doctor_ci)
@@ -20,8 +20,8 @@ class DoctorController {
     $this->request_method = $request_method;
     $this->doctor_ci = $doctor_ci;
 
-    $this->user_gateway = new UserGateway($db);
     $this->doctor_gateway = new DoctorGateWay($db);
+    $this->user_controller = new UserController($db);
   }
 
   public function processRequest(): Void
@@ -78,7 +78,8 @@ class DoctorController {
     if (! $this->validateDoctor($input)) {
       return Utils::unprocessableEntityResponse();
     }
-    $user_id = $this->createUser($input);
+
+    $user_id = $this->user_controller->createUser($input);
 
     $doctor_input = array(
       'ci' => $input['ci'],
@@ -86,7 +87,7 @@ class DoctorController {
       'lastname' => $input['lastname'],
       'starts_at' => $input['starts_at'],
       'ends_at' => $input['ends_at'],
-      'cost' => $input['cos'],
+      'cost' => $input['cost'],
     );
 
     $this->doctor_gateway->insert($doctor_input, $user_id);
@@ -95,31 +96,8 @@ class DoctorController {
     return $response;
   }
 
-  private function createUser(Array $input): Int
-  {
-    $user_input = array(
-      'email' => $input['email'],
-      'role' => $input['role'],
-      'password' => $input['password'],
-    );
-
-    return $this->user_gateway->insert($user_input);
-  }
-
   private function validateDoctor(Array $input): Bool
   {
-    if (! isset($input['email']) || 
-        ! filter_var($input['email'], FILTER_VALIDATE_EMAIL)) {
-      return false;
-    }
-    if (! isset($input['password']) || 
-        strlen($input['password']) < 8) {
-      return false;
-    }
-    if (! isset($input['role']) || 
-        strtolower($input['role']) !== 'doctor') {
-      return false;
-    }
     if (! isset($input['ci']) ||
         strlen($input['ci']) < 5 ||
         ! empty($this->doctor_gateway->find($input['ci']))) {
