@@ -2,7 +2,7 @@
 namespace Src\Controller;
 
 use Src\Utils\Utils;
-use Src\TableGateways\DoctorGateWay;
+use Src\TableGateways\DoctorGateway;
 use Src\Controller\UserController;
 
 class DoctorController {
@@ -20,7 +20,7 @@ class DoctorController {
     $this->request_method = $request_method;
     $this->doctor_ci = $doctor_ci;
 
-    $this->doctor_gateway = new DoctorGateWay($db);
+    $this->doctor_gateway = new DoctorGateway($db);
     $this->user_controller = new UserController($db);
   }
 
@@ -38,7 +38,7 @@ class DoctorController {
         $response = $this->CreateDoctorFromRequest();
         break;
       case 'PUT':
-        $response = $this->updateDoctorFromRequest();
+        $response = $this->updateDoctorFromRequest($this->doctor_ci);
         break;
       case 'DELETE':
         $response = $this->deleteDoctor($this->doctor_ci);
@@ -92,7 +92,41 @@ class DoctorController {
 
     $this->doctor_gateway->insert($doctor_input, $user_id);
     $response['status_code_header'] = 'HTTP/1.1 201 Created';
-    $response['body'] = null;
+    $response['body'] = json_encode([
+      'message' => 'Doctor registered successfully'
+    ]);
+    return $response;
+  }
+
+  private function updateDoctorFromRequest($ci)
+  {
+    $result = $this->doctor_gateway->find($ci);
+    if (! $result) {
+      return Utils::notFoundResponse();
+    }
+    $input = (array) json_decode(file_get_contents('php://input'), TRUE);
+    if (! $this->validateDoctor($input)) {
+      return Utils::unprocessableEntityResponse();
+    }
+    $this->doctor_gateway->update($ci, $input);
+    $response['status_code_header'] = 'HTTP/1.1 200 OK';
+    $response['body'] = json_encode([
+      'message' => 'Doctor updated successfully'
+    ]);
+    return $response;
+  } 
+
+  private function deleteDoctor($ci) 
+  {
+    $result = $this->doctor_gateway->find($ci);
+    if (! $result) {
+      return Utils::notFoundResponse();
+    }
+    $this->doctor_gateway->delete($ci);
+    $response['status_code_header'] = 'HTTP/1.1 200 OK';
+    $response['body'] = json_encode([
+      'message' => 'Doctor deleted successfully'
+    ]);
     return $response;
   }
 
