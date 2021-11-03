@@ -10,7 +10,7 @@ class DoctorGateWay {
     $this->db = $db;
   }
 
-  public function findAll(): Array|Void
+  public function findAll(): Array
   {
     $statement = "SELECT * FROM Doctor;";
 
@@ -23,7 +23,7 @@ class DoctorGateWay {
     }
   }
 
-  public function find($ci): Array|Void
+  public function find($ci): Array
   {
     $statement = "
       SELECT *
@@ -41,7 +41,7 @@ class DoctorGateWay {
     }
   }
 
-  public function insert(Array $input, $user_id): Int|Void
+  public function insert(Array $input, $user_id): Int
   {
     $statement = "
       INSERT INTO Doctor
@@ -67,7 +67,7 @@ class DoctorGateWay {
     }
   }
 
-  public function update($ci, Array $input): Int|Void
+  public function update($ci, Array $input): Int
   {
     $statement = "
       UPDATE Doctor
@@ -96,7 +96,7 @@ class DoctorGateWay {
     }
   }
 
-  public function delete($ci)
+  public function delete($ci): Int
   {
     $statement = "
       DELETE u 

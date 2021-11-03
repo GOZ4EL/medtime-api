@@ -10,7 +10,7 @@ class UserGateway {
     $this->db = $db;
   }
 
-  public function find($id): Int|Void
+  public function find($id): Int
   {
     $statement = "
       SELECT *
@@ -28,13 +28,13 @@ class UserGateway {
     }
   }
 
-  public function insert(Array $input): Int|Void
+  public function insert(Array $input): Int
   {
     $statement = "
       INSERT INTO User 
-        (email, role, password)
+        (id, email, role, password)
       VALUES
-        (:email, :role, :password);
+        (NULL, :email, :role, :password);
     ";
 
     try {
