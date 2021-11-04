@@ -12,7 +12,11 @@ class DoctorGateWay {
 
   public function findAll(): Array
   {
-    $statement = "SELECT * FROM Doctor;";
+    $statement = "
+      SELECT *
+      FROM Doctor
+        ORDER BY user_id;
+    ";
 
     try {
       $statement = $this->db->query($statement);
