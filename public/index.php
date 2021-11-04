@@ -24,4 +24,4 @@ if (isset($uri[2])) {
 $request_method = $_SERVER["REQUEST_METHOD"];
 
 $controller = new DoctorController($db_connection, $request_method, $doctor_ci);
-
+$controller->processRequest();
