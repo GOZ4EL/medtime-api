@@ -1,0 +1,3 @@
+#!/bin/zsh
+
+sed -i -e "s/\(DB_DATABASE=\).*/\1medtime/" .env
