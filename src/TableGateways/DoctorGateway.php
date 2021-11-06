@@ -63,7 +63,7 @@ class DoctorGateWay {
         'lastname' => $input['lastname'],
         'starts_at' => $input['starts_at'],
         'ends_at' => $input['ends_at'],
-        'cost' => $input['cost']
+        'cost' => $input['cost'],
       ));
       return $statement->rowCount();
     } catch (\PDOException $e) {
