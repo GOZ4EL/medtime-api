@@ -14,7 +14,7 @@ class UserController {
     $this->user_gateway = new UserGateway($db);
   }
 
-  public function createUser(Array $input): Int
+  public function createUser(Array $input): Int|Array
   {
     if (! $this->validateUser($input)) {
       return Utils::unprocessableEntityResponse();
