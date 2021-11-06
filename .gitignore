@@ -1,4 +1,4 @@
 vendor/
 .env
 test.json
-phpunit.result.cache
+.phpunit.result.cache
