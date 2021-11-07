@@ -6,7 +6,9 @@ use Src\Utils\Utils;
 class DoctorControllerTest extends \PHPUnit\Framework\TestCase
 {
 
-  public function createDummyDoctor(Array $data = null)
+  private $endpoint = 'http://127.0.0.1/doctor';
+
+  private function createDummyDoctor(Array $data = null): Array
   {
     $dummy_doctor = array(
       'email' => 'test1@test.com',
