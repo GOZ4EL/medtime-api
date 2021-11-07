@@ -29,8 +29,16 @@ class Utils {
     if (getenv('DB_DATABASE') != 'testing_medtime') {
       throw new Exception("The current database isn't the test one");
     }
-    $sql = "DELETE FROM User";
-    $db_connection->exec($sql);
+    $queries = array(
+      "DELETE FROM User",
+      "ALTER TABLE User AUTO_INCREMENT = 1",
+      "ALTER TABLE Admin AUTO_INCREMENT = 1",
+      "ALTER TABLE Specialization AUTO_INCREMENT = 1",
+      "ALTER TABLE Appointment AUTO_INCREMENT = 1",
+    );
+    foreach($queries as $query) {
+      $db_connection->exec($query);
+    }
   }
 }
 
