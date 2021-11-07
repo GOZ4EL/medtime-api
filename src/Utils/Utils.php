@@ -22,7 +22,7 @@ class Utils {
     return $response;
   }
 
-  public static function makeTestDatabaseEmpty(): Void
+  public static function emptyTestDatabase(): Void
   {
     require dirname(__FILE__) . '/../../bootstrap.php';
 
