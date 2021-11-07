@@ -66,5 +66,45 @@ class DoctorControllerTest extends \PHPUnit\Framework\TestCase
       $data
     );
   }
+
+  public function testGetWithoutArguments()
+  {
+    $client = new Client();
+    $doctor1 = $this->createDummyDoctor();
+    $doctor2 = $this->createDummyDoctor([
+      'email' => 'example@example.com',
+      'ci' => '23456756',
+    ]);
+    $client->post($this->endpoint, ['json' => $doctor1]);
+    $client->post($this->endpoint, ['json' => $doctor2]);
+    $response = $client->get($this->endpoint);
+
+    $doctor1 = array(
+      'ci' => $doctor1['ci'],
+      'user_id' => 1,
+      'firstname' => $doctor1['firstname'],
+      'lastname' => $doctor1['lastname'],
+      'starts_at' => $doctor1['starts_at'],
+      'ends_at' => $doctor1['ends_at'],
+      'cost' => $doctor1['cost']
+    );
+
+    $doctor2 = array(
+      'ci' => $doctor2['ci'],
+      'user_id' => 2,
+      'firstname' => $doctor2['firstname'],
+      'lastname' => $doctor2['lastname'],
+      'starts_at' => $doctor2['starts_at'],
+      'ends_at' => $doctor2['ends_at'],
+      'cost' => $doctor2['cost']
+    );
+
+    $this->assertEquals(200, $response->getStatusCode());
+    $data = json_decode($response->getBody(true), true);
+    $this->assertEquals([$doctor1, $doctor2], $data);
+
+    Utils::emptyTestDatabase();
+  }
+
 }
 
