@@ -81,6 +81,10 @@ class DoctorController {
 
     $user_id = $this->user_controller->createUser($input);
 
+    if (gettype($user_id) === "array") {
+      return $user_id;
+    }
+
     $doctor_input = array(
       'ci' => $input['ci'],
       'firstname' => $input['firstname'],
