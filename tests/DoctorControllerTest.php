@@ -33,22 +33,36 @@ class DoctorControllerTest extends \PHPUnit\Framework\TestCase
     return $dummy_doctor;
   }
 
-  public function test_post()
+  public function testPostWithValidData()
   {
-    Utils::makeTestDatabaseEmpty();
+    Utils::emptyTestDatabase();
 
     $client = new Client();
-    $data = $this->createDummyDoctor(array(
-      'email' => 'hordemzerado@gmail.com',
-      'firstname' => 'loko',
-      'cost' => '999.99'
-    ));
-    $response = $client->post('http://127.0.0.1/doctor',['json' => $data]);
+    $data = $this->createDummyDoctor();
+    $response = $client->post($this->endpoint, ['json' => $data]);
 
     $this->assertEquals(201, $response->getStatusCode());
     $data = json_decode($response->getBody(true), true);
     $this->assertEquals(
       ['message' => 'Doctor registered successfully'], 
+      $data
+    );
+
+    Utils::emptyTestDatabase();
+  }
+
+  public function testPostWithInvalidData()
+  {
+    $this->expectException(GuzzleHttp\Exception\ClientException::class);
+
+    $client = new Client();
+    $data = $this->createDummyDoctor(['email' => 'invalid email']);
+    $response = $client->post($this->endpoint, ['json' => $data]);
+
+    $this->assertEquals(422, $response->getStatusCode());
+    $data = json_decode($response->getBody(true), true);
+    $this->assertEquals(
+      ['error' => 'Invalid input'],
       $data
     );
   }
