@@ -106,5 +106,48 @@ class DoctorControllerTest extends \PHPUnit\Framework\TestCase
     Utils::emptyTestDatabase();
   }
 
+  public function testGetWithExpectedArguments()
+  {
+    $client = new Client();
+    $doctor = $this->createDummyDoctor();
+    $client->post($this->endpoint, ['json' => $doctor]);
+
+    $doctor = array(
+      'ci' => $doctor['ci'],
+      'user_id' => 1,
+      'firstname' => $doctor['firstname'],
+      'lastname' => $doctor['lastname'],
+      'starts_at' => $doctor['starts_at'],
+      'ends_at' => $doctor['ends_at'],
+      'cost' => $doctor['cost']
+    );
+    $ci = $doctor['ci'];
+
+    $response = $client->get($this->endpoint . "/$ci");
+
+    $this->assertEquals(200, $response->getStatusCode());
+    $data = json_decode($response->getBody(true), true);
+    $this->assertEquals([$doctor], $data);
+
+    Utils::emptyTestDatabase();
+  }
+
+  public function testGetWithInvalidArguments()
+  {
+    $this->expectException(GuzzleHttp\Exception\ClientException::class);
+
+    $client = new Client();
+    $doctor = $this->createDummyDoctor();
+    $client->post($this->endpoint, ['json' => $doctor]);
+    $response = $client->get($this->endpoint . "/1");
+
+    $this->assertEquals(404, $response->getStatusCode());
+    $data = json_decode($response->getBody(true), true);
+    $this->assertEquals(
+      ['error' => 'Object not found'],
+      $data
+    );
+    Utils::emptyTestDatabase();
+  }
 }
 
