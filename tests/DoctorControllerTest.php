@@ -17,9 +17,9 @@ class DoctorControllerTest extends \PHPUnit\Framework\TestCase
       'ci' => '12345678',
       'firstname' => 'Testing',
       'lastname' => 'Just One',
-      'starts_at' => '10:00',
-      'ends_at' => '16:00',
-      'cost' => '50'
+      'starts_at' => '10:00:00',
+      'ends_at' => '16:00:00',
+      'cost' => '50.00'
     );
 
     if(isset($data)) {
