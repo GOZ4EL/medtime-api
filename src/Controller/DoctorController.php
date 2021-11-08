@@ -73,7 +73,8 @@ class DoctorController {
   private function createDoctorFromRequest()
   {
     $input = (array) json_decode(file_get_contents('php://input'), TRUE);
-    if (! $this->validateDoctor($input)) {
+    if (! $this->validateDoctor($input) ||
+        ! empty($this->doctor_gateway->find($input['ci']))) {
       return Utils::unprocessableEntityResponse();
     }
 
@@ -135,8 +136,7 @@ class DoctorController {
   private function validateDoctor(Array $input): Bool
   {
     if (! isset($input['ci']) ||
-        strlen($input['ci']) < 5 ||
-        ! empty($this->doctor_gateway->find($input['ci']))) {
+        strlen($input['ci']) < 5) {
       return false;
     }
     if (! isset($input['firstname'])) {
