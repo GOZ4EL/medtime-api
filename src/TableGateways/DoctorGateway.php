@@ -88,11 +88,11 @@ class DoctorGateWay {
       $statement = $this->db->prepare($statement);
       $statement->execute(array(
         'ci' => (int) $ci,
-        'firstname' => $input['firstname'] ?? null,
-        'lastname' => $input['lastname'] ?? null,
-        'starts_at' => $input['starts_at'] ?? null,
-        'ends_at' => $input['ends_at'] ?? null,
-        'cost' => $input['cost'] ?? null,
+        'firstname' => $input['firstname'],
+        'lastname' => $input['lastname'],
+        'starts_at' => $input['starts_at'],
+        'ends_at' => $input['ends_at'],
+        'cost' => $input['cost'],
       ));
       return $statement->rowCount();
     } catch (\PDOException $e) {
