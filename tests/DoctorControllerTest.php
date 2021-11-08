@@ -47,8 +47,6 @@ class DoctorControllerTest extends \PHPUnit\Framework\TestCase
       ['message' => 'Doctor registered successfully'], 
       $data
     );
-
-    Utils::emptyTestDatabase();
   }
 
   public function testPostWithInvalidData()
@@ -69,6 +67,8 @@ class DoctorControllerTest extends \PHPUnit\Framework\TestCase
 
   public function testGetWithoutArguments()
   {
+    Utils::emptyTestDatabase();
+
     $client = new Client();
     $doctor1 = $this->createDummyDoctor();
     $doctor2 = $this->createDummyDoctor([
@@ -102,12 +102,12 @@ class DoctorControllerTest extends \PHPUnit\Framework\TestCase
     $this->assertEquals(200, $response->getStatusCode());
     $data = json_decode($response->getBody(true), true);
     $this->assertEquals([$doctor1, $doctor2], $data);
-
-    Utils::emptyTestDatabase();
   }
 
   public function testGetWithExpectedArguments()
   {
+    Utils::emptyTestDatabase();
+
     $client = new Client();
     $doctor = $this->createDummyDoctor();
     $client->post($this->endpoint, ['json' => $doctor]);
@@ -128,12 +128,12 @@ class DoctorControllerTest extends \PHPUnit\Framework\TestCase
     $this->assertEquals(200, $response->getStatusCode());
     $data = json_decode($response->getBody(true), true);
     $this->assertEquals([$doctor], $data);
-
-    Utils::emptyTestDatabase();
   }
 
   public function testGetWithInvalidArguments()
   {
+    Utils::emptyTestDatabase();
+
     $this->expectException(GuzzleHttp\Exception\ClientException::class);
 
     $client = new Client();
@@ -147,7 +147,60 @@ class DoctorControllerTest extends \PHPUnit\Framework\TestCase
       ['error' => 'Object not found'],
       $data
     );
+  }
+
+  public function testPutWithValidCiAndValidData()
+  {
     Utils::emptyTestDatabase();
+
+    $client = new Client();
+    $doctor = $this->createDummyDoctor();
+    $client->post($this->endpoint, ['json' => $doctor]);
+
+    $doctor['firstname'] = 'Test 2';
+    $ci = $doctor['ci'];
+    $response = $client->put(
+      $this->endpoint . "/$ci", 
+      ['json' => $doctor]
+    );
+
+    $this->assertEquals(200, $response->getStatusCode());
+    $data = json_decode($response->getBody(true), true);
+    $this->assertEquals(
+      ['message' => 'Doctor updated successfully'],
+      $data
+    );
+  }
+
+#  public function testPutWithValidCiAndInvalidData()
+#  {
+#    Utils::emptyTestDatabase();
+#
+#    $client = new Client();
+#    $doctor = $this->createDummyDoctor();
+#    $client->post($this->endpoint, ['json' => $doctor]);
+#  }
+  
+  public function testDelete()
+  {
+    Utils::emptyTestDatabase();
+
+    $client = new Client();
+    $doctor = $this->createDummyDoctor();
+    $client->post($this->endpoint, ['json' => $doctor]);
+
+    $ci = $doctor['ci'];
+    $response = $client->delete($this->endpoint . "/$ci");
+    $this->assertEquals(200, $response->getStatusCode());
+    $data = json_decode($response->getBody(true), true);
+    $this->assertEquals(
+      ['message' => 'Doctor deleted successfully'],
+      $data
+    );
+
+    $response = $client->get($this->endpoint);
+    $data = json_encode($response->getBody(true), true);
+    $this->assertEquals('{}', $data);
   }
 }
 
