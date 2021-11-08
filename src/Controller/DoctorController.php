@@ -48,9 +48,7 @@ class DoctorController {
         break;
     }
     header($response['status_code_header']);
-    if ($response['body']) {
-      echo $response['body'];
-    }
+    echo $response['body'];
   }
 
   private function getAllDoctors(): Array
