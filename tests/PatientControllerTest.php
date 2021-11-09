@@ -1,5 +1,6 @@
 <?php
 include(dirname(__FILE__) . "/../src/Utils/Utils.php");
+use Src\Utils\Utils;
 use GuzzleHttp\Client;
 
 class PatientControllerTest extends \PHPUnit\Framework\TestCase
@@ -81,9 +82,7 @@ class PatientControllerTest extends \PHPUnit\Framework\TestCase
       'user_id' => 1,
       'firstname' => $patient1['firstname'],
       'lastname' => $patient1['lastname'],
-      'starts_at' => $patient1['starts_at'],
-      'ends_at' => $patient1['ends_at'],
-      'cost' => $patient1['cost']
+      'city_id' => $patient1['city_id'],
     );
 
     $patient2 = array(
@@ -91,9 +90,7 @@ class PatientControllerTest extends \PHPUnit\Framework\TestCase
       'user_id' => 2,
       'firstname' => $patient2['firstname'],
       'lastname' => $patient2['lastname'],
-      'starts_at' => $patient2['starts_at'],
-      'ends_at' => $patient2['ends_at'],
-      'cost' => $patient2['cost']
+      'city_id' => $patient2['city_id'],
     );
 
     $this->assertEquals(200, $response->getStatusCode());
@@ -114,9 +111,7 @@ class PatientControllerTest extends \PHPUnit\Framework\TestCase
       'user_id' => 1,
       'firstname' => $patient['firstname'],
       'lastname' => $patient['lastname'],
-      'starts_at' => $patient['starts_at'],
-      'ends_at' => $patient['ends_at'],
-      'cost' => $patient['cost']
+      'city_id' => $patient['city_id'],
     );
     $ci = $patient['ci'];
 

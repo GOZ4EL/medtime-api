@@ -51,7 +51,7 @@ class PatientGateway {
       INSERT INTO Patient
         (ci, user_id, city_id, firstname, lastname)
       VALUES
-        (:ci, :user_id, :city_id, :firstname), :lastname;
+        (:ci, :user_id, :city_id, :firstname, :lastname);
     ";
 
     try {
@@ -76,7 +76,7 @@ class PatientGateway {
       SET
         city_id = :city_id,
         firstname = :firstname,
-        lastname = :lastname,
+        lastname = :lastname
       WHERE ci = :ci;
     ";
 
@@ -101,7 +101,7 @@ class PatientGateway {
       FROM Patient p
         JOIN User u
           ON p.user_id = u.id
-      WHERE d.ci = :ci;
+      WHERE p.ci = :ci;
     ";
 
     try {
