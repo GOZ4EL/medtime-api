@@ -43,6 +43,12 @@ class DoctorController {
       case 'DELETE':
         $response = $this->deleteDoctor($this->doctor_ci);
         break;
+      case 'OPTIONS':
+        $response['status_code_header'] = 'HTTP/1.1 200 OK';
+        $response['body'] = json_encode([
+          'message' => 'Access Granted'
+        ]);
+        break;
       default:
         $response = Utils::notFoundResponse();
         break;
