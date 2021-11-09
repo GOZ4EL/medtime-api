@@ -39,7 +39,8 @@ class UserController {
       return false;
     }
     if (! isset($input['role']) || 
-        strtolower($input['role']) !== 'doctor') {
+        (strtolower($input['role']) !== 'doctor' &&
+         strtolower($input['role'] !== 'patient'))) {
       return false;
     }
 
