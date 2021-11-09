@@ -94,9 +94,7 @@ class PatientController {
       'ci' => $input['ci'],
       'firstname' => $input['firstname'],
       'lastname' => $input['lastname'],
-      'starts_at' => $input['starts_at'],
-      'ends_at' => $input['ends_at'],
-      'cost' => $input['cost'],
+      'city_id' => $input['city_id'],
     );
 
     $this->patient_gateway->insert($patient_input, $user_id);
