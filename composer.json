@@ -1,7 +1,8 @@
 {
   "require": {
     "vlucas/phpdotenv": "^2.4",
-    "guzzlehttp/guzzle": "^7.4"
+    "guzzlehttp/guzzle": "^7.4",
+    "firebase/php-jwt": "^5.5"
   },
   "autoload": {
     "psr-4": {
