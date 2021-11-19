@@ -74,5 +74,52 @@ class UserControllerTest extends \PHPUnit\Framework\TestCase
     $data = json_decode($response->getBody(true), true);
     $this->assertArrayHasKey('jwt', $data);
   }
+
+  public function testLoginWithInvalidEmail()
+  {
+    Utils::emptyTestDatabase();
+
+    $client = new Client();
+    $doctor = $this->createDummyDoctor();
+    $client->post($this->endpoint . 'doctor', ['json' => $doctor]);
+
+    $response = $client->post(
+      $this->endpoint . 'user/login',
+      ['json' => array(
+        'email' => 'testinvalid@test.com',
+        'role' => $doctor['role'],
+        'password' => $doctor['password'],
+      )]
+    );
+    $data = json_decode($response->getBody(true), true);
+    $this->assertEquals(
+      ['message' => 'Invalid email'],
+      $data
+    );
+  }
+  
+  public function testLoginWithInvalidPassword()
+  {
+    Utils::emptyTestDatabase();
+
+    $client = new Client();
+    $doctor = $this->createDummyDoctor();
+    $client->post($this->endpoint . 'doctor', ['json' => $doctor]);
+
+    $response = $client->post(
+      $this->endpoint . 'user/login',
+      ['json' => array(
+        'email' => $doctor['email'],
+        'role' => $doctor['role'],
+        'password' => 'Invalid Password',
+      )]
+    );
+    $data = json_decode($response->getBody(true), true);
+    $this->assertEquals(
+      ['message' => 'Invalid password'],
+      $data
+    );
+ 
+  }
 }
 
