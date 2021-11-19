@@ -50,5 +50,43 @@ class UserGateway {
       exit($e->getMessage());
     }
   }
+
+  public function login(Array $input)
+  {
+    $statement = "
+      SELECT *
+      FROM User
+      WHERE email = ?
+    ";
+
+    try {
+      $statement = $this->db->prepare($statement);
+      $statement->execute(array($input['email']));
+      $result = $statement->fetchAll(\PDO::FETCH_ASSOC)[0];
+      
+      if ($result == NULL) {
+        $result = array(
+          'message' => 'Invalid email',
+        );
+      } 
+
+      $hashed_pass = $result['password'];
+      if (password_verify($input['password'], $hashed_pass)) {
+        $result = array(
+          'id' => $result['id'],
+          'email' => $result['email'],
+          'role' => $result['role'],
+          'jwt' => 'kjasfjkasfk;jlhfkla;sfkfdak;j'
+        );
+      } else {
+        $result = array(
+          'message' => 'Invalid password',
+        );
+      }
+      return $result;
+    } catch (\PDOException $e) {
+      exit($e->getMessage());
+    }
+  }
 }
 
