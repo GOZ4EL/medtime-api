@@ -68,6 +68,7 @@ class UserGateway {
         $result = array(
           'message' => 'Invalid email',
         );
+        return $result;
       } 
 
       $hashed_pass = $result['password'];
