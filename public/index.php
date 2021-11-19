@@ -1,5 +1,6 @@
 <?php
 require "../bootstrap.php";
+use Src\Controller\UserController;
 use Src\Controller\DoctorController;
 use Src\Controller\PatientController;
 
@@ -30,6 +31,13 @@ switch ($endpoint) {
     }
     $controller = new PatientController($db_connection, $request_method, $patient_ci);
     break;
+  case 'user':
+    $login = false;
+    if (isset($uri[2]) && strtolower($uri[2]) === "login") {
+      $login = true;
+    }
+    $controller = new UserController($db_connection, $request_method, $login);
+    break;
   default:
     header("HTTP/1.1 404 Not Found");
     echo json_encode(array(
@@ -37,5 +45,4 @@ switch ($endpoint) {
     ));
     exit();
 }
-
 $controller->processRequest();
