@@ -118,5 +118,24 @@ class DoctorGateWay {
       exit($e->getMessage());
     }
   }
+
+  public function findByUserId($user_id)
+  {
+    $statement = "
+      SELECT *
+      FROM Doctor
+      WHERE user_id = ?;
+    ";
+
+    try {
+      $statement = $this->db->prepare($statement);
+      $statement->execute(array($user_id));
+      $result = $statement->fetchAll(\PDO::FETCH_ASSOC)[0];
+      return $result;
+    } catch (\PDOException $e) {
+      exit($e->getMessage());
+    }
+ 
+  }
 }
 

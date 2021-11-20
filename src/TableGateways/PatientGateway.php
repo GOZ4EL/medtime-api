@@ -112,5 +112,24 @@ class PatientGateway {
       exit($e->getMessage());
     }
   }
+
+  public function findByUserId($user_id)
+  {
+    $statement = "
+      SELECT *
+      FROM Patient
+      WHERE user_id = ?;
+    ";
+
+    try {
+      $statement = $this->db->prepare($statement);
+      $statement->execute(array($user_id));
+      $result = $statement->fetchAll(\PDO::FETCH_ASSOC)[0];
+      return $result;
+    } catch (\PDOException $e) {
+      exit($e->getMessage());
+    }
+ 
+  }
 }
 

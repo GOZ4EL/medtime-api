@@ -2,6 +2,8 @@
 namespace Src\Controller;
 
 use Src\TableGateways\UserGateway;
+use Src\TableGateways\DoctorGateway;
+use Src\TableGateways\PatientGateway;
 use Src\Utils\Utils;
 
 class UserController {
@@ -48,8 +50,23 @@ class UserController {
     if (! $this->validateUser($input)) {
       return Utils::notFoundResponse();
     }
+    $user = $this->user_gateway->login($input);
+
+    if (isset($user['role']) && strtolower($user['role']) === 'doctor') {
+      $doctor_gateway = new DoctorGateway($this->db);
+      $doctor = $doctor_gateway->findByUserId($user['id']);
+      $user = array_merge($doctor, $user);
+      unset($user['id']);
+    }
+    if (isset($user['role']) && strtolower($user['role']) === 'patient') {
+      $patient_gateway = new PatientGateway($this->db);
+      $patient = $patient_gateway->findByUserId($user['id']);
+      $user = array_merge($patient, $user);
+      unset($user['id']);
+    }
+
     $response['status_code_header'] = 'HTTP/1.1 200 OK';
-    $response['body'] = json_encode($this->user_gateway->login($input), true);
+    $response['body'] = json_encode($user, true);
     return $response;
   }
 
