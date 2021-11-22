@@ -45,7 +45,7 @@ switch ($endpoint) {
     $doctor_ci = null;
     $patient_ci = null;
 
-    if (isset($uri[2]) &&
+    if (isset($uri[2]) && ! is_numeric($uri[2]) && $uri[2] != '' &&
         (($uri[2] != 'doctor' && $uri[2] != 'patient') ||
          (! is_numeric($uri[3])))) {
       $response = Utils::notFoundResponse(); 
