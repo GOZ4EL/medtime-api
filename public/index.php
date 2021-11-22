@@ -4,6 +4,7 @@ use Src\Utils\Utils;
 use Src\Controller\UserController;
 use Src\Controller\DoctorController;
 use Src\Controller\PatientController;
+use Src\Controller\SpecialityController;
 use Src\Controller\AppointmentController;
 
 header("Access-Control-Allow-Origin: *");
@@ -39,6 +40,10 @@ switch ($endpoint) {
       $login = true;
     }
     $controller = new UserController($db_connection, $request_method, $login);
+    break;
+  case 'speciality':
+    $name = isset($uri[2]) ? $uri[2] : null;
+    $controller = new SpecialityController($db_connection, $request_method, $name);
     break;
   case 'appointment':
     $id = null;
