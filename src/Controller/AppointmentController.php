@@ -119,6 +119,7 @@ class AppointmentController {
       'patient_ci' => $input['patient_ci'],
       'day' => $input['day'],
       'hour' => $input['hour'],
+      'status' => $input['status'],
     );
 
     $this->appointment_gateway->insert($appointment_input);
@@ -175,6 +176,12 @@ class AppointmentController {
       return false;
     }
     if (! isset($input['hour'])) {
+      return false;
+    }
+    if (! isset($input['status']) ||
+        (strtolower($input['status']) != 'active' &&
+         strtolower($input['status']) != 'done' &&
+         strtolower($input['status']) != 'cancelled')) {
       return false;
     }
     return true;

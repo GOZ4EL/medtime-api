@@ -61,6 +61,7 @@ class AppointmentGateWay {
         'patient_ci' => $input['patient_ci'],
         'day' => $input['day'],
         'hour' => $input['hour'],
+        'status' => $input['status'],
       ));
       return $statement->rowCount();
     } catch (\PDOException $e) {
@@ -74,7 +75,8 @@ class AppointmentGateWay {
       UPDATE Appointment
       SET
         day = :day,
-        hour = :hour
+        hour = :hour,
+        status = :status
       WHERE id = :id;
     ";
 
@@ -84,6 +86,7 @@ class AppointmentGateWay {
         'id' => (int) $id,
         'day' => $input['day'],
         'hour' => $input['hour'],
+        'status' => $input['status'],
       ));
       return $statement->rowCount();
     } catch (\PDOException $e) {

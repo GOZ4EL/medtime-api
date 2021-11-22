@@ -105,3 +105,4 @@ CREATE TABLE Appointment(
 		REFERENCES Patient(ci)
 		ON DELETE CASCADE
 ) ENGINE=INNODB;
+ALTER TABLE Appointment ADD COLUMN status varchar(250) NOT NULL;
