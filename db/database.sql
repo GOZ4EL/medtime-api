@@ -79,7 +79,7 @@ CREATE TABLE Speciality(
 ) ENGINE=INNODB;
 
 CREATE TABLE Specialization(
-	id int NOT NULL,
+	id int NOT NULL AUTO_INCREMENT,
 	doctor_ci varchar(12) NOT NULL,
 	speciality_name varchar(250) NOT NULL,
 	PRIMARY KEY (id),
