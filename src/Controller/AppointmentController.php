@@ -10,15 +10,20 @@ class AppointmentController {
   private $db;
   private $request_method;
   private $id;
+  private $doctor_ci;
+  private $patient_ci;
 
   private $user_controller;
   private $appointment_gateway;
 
-  public function __construct(\PDO $db, $request_method, $id)
+  public function __construct(\PDO $db, $request_method, $id,
+                              $doctor_ci, $patient_ci)
   {
     $this->db = $db;
     $this->request_method = $request_method;
     $this->id = $id;
+    $this->doctor_ci = $doctor_ci;
+    $this->patient_ci = $patient_ci;
 
     $this->appointment_gateway = new AppointmentGateway($db);
     $this->user_controller = new UserController($db);
@@ -30,6 +35,10 @@ class AppointmentController {
       case 'GET':
         if ($this->id) {
           $response = $this->getAppointment($this->id);
+        } else if($this->doctor_ci) {
+          $response = $this->getAppointmentsByDoctor($this->doctor_ci);
+        } else if ($this->patient_ci) {
+          $response = $this->getAppointmentsByPatient($this->patient_ci);
         } else {
           $response = $this->getAllAppointments();
         };
@@ -68,6 +77,28 @@ class AppointmentController {
   private function getAppointment($id): Array
   {
     $result = $this->appointment_gateway->find($id);
+    if (! $result) {
+      return Utils::notFoundResponse();
+    }
+    $response['status_code_header'] = 'HTTP/1.1 200 OK';
+    $response['body'] = json_encode($result);
+    return $response;
+  }
+
+  private function getAppointmentsByDoctor($doctor_ci)
+  {
+    $result = $this->appointment_gateway->findByDoctorCi($doctor_ci);
+    if (! $result) {
+      return Utils::notFoundResponse();
+    }
+    $response['status_code_header'] = 'HTTP/1.1 200 OK';
+    $response['body'] = json_encode($result);
+    return $response;
+  }
+
+  private function getAppointmentsByPatient($patient_ci)
+  {
+    $result = $this->appointment_gateway->findByPatientCi($patient_ci);
     if (! $result) {
       return Utils::notFoundResponse();
     }
