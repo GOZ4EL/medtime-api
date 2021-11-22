@@ -3,6 +3,7 @@ require "../bootstrap.php";
 use Src\Controller\UserController;
 use Src\Controller\DoctorController;
 use Src\Controller\PatientController;
+use Src\Controller\AppointmentController;
 
 header("Access-Control-Allow-Origin: *");
 header("Content-Type: application/json; charset=UTF-8");
@@ -37,6 +38,13 @@ switch ($endpoint) {
       $login = true;
     }
     $controller = new UserController($db_connection, $request_method, $login);
+    break;
+  case 'appointment':
+    $id = null;
+    if (isset($uri[2])) {
+      $id = $uri[2];
+    }
+    $controller = new AppointmentController($db_connection, $request_method, $id);
     break;
   default:
     header("HTTP/1.1 404 Not Found");
