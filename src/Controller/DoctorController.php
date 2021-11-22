@@ -6,11 +6,11 @@ use Src\TableGateways\DoctorGateway;
 use Src\Controller\UserController;
 
 class DoctorController {
-  
+
   private $db;
   private $request_method;
   private $doctor_ci;
-  
+
   private $user_controller;
   private $doctor_gateway;
 
