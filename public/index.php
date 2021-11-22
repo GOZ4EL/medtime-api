@@ -1,5 +1,6 @@
 <?php
 require "../bootstrap.php";
+use Src\Utils\Utils;
 use Src\Controller\UserController;
 use Src\Controller\DoctorController;
 use Src\Controller\PatientController;
@@ -41,10 +42,29 @@ switch ($endpoint) {
     break;
   case 'appointment':
     $id = null;
-    if (isset($uri[2])) {
-      $id = $uri[2];
+    $doctor_ci = null;
+    $patient_ci = null;
+
+    if (isset($uri[2]) &&
+        (($uri[2] != 'doctor' && $uri[2] != 'patient') ||
+         (! is_numeric($uri[3])))) {
+      $response = Utils::notFoundResponse(); 
+      header($response['status_code_header']);
+      echo($response['body']);
+      return;
     }
-    $controller = new AppointmentController($db_connection, $request_method, $id);
+
+    if (isset($uri[2]) && is_numeric($uri[2])) {
+      $id = $uri[2];
+    } else if (isset($uri[2]) && isset($uri[3]) &&
+               strtolower($uri[2]) === 'doctor') {
+      $doctor_ci = $uri[3];
+    } else if (isset($uri[2]) && isset($uri[3]) &&
+               strtolower($uri[2]) === 'patient') {
+      $patient_ci = $uri[3];
+    }
+    $controller = new AppointmentController($db_connection, $request_method, $id,
+                                            $doctor_ci, $patient_ci);
     break;
   default:
     header("HTTP/1.1 404 Not Found");
