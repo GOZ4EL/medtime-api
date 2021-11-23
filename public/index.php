@@ -7,6 +7,7 @@ use Src\Controller\PatientController;
 use Src\Controller\SpecialityController;
 use Src\Controller\SpecializationController;
 use Src\Controller\AppointmentController;
+use Src\Controller\AddressController;
 
 header("Access-Control-Allow-Origin: *");
 header("Content-Type: application/json; charset=UTF-8");
@@ -75,6 +76,10 @@ switch ($endpoint) {
     }
     $controller = new AppointmentController($db_connection, $request_method, $id,
                                             $doctor_ci, $patient_ci);
+    break;
+  case 'address':
+    $city_id = isset($uri[2]) ? $uri[2] : null;
+    $controller = new AddressController($db_connection, $request_method, $city_id);
     break;
   default:
     header("HTTP/1.1 404 Not Found");
