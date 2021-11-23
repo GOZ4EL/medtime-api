@@ -3,19 +3,21 @@ CREATE DATABASE medtime CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 USE medtime;
 
 CREATE TABLE State(
+	id int NOT NULL AUTO_INCREMENT,
 	name varchar(250) NOT NULL,
-	PRIMARY KEY (name)
+	PRIMARY KEY (id)
 ) ENGINE=INNODB;
 
 CREATE TABLE City(
 	id int NOT NULL AUTO_INCREMENT,
-	state_name varchar(250) NOT NULL,
+	state_id int NOT NULL,
+	name varchar(250) NOT NULL,
+	capital tinyint(1) NOT NULL DEFAULT '0',
 	PRIMARY KEY (id),
-	FOREIGN KEY (state_name)
-		REFERENCES State(name)
-		ON DELETE CASCADE
+	FOREIGN KEY (state_id)
+	REFERENCES State(id)
+	ON DELETE CASCADE
 ) ENGINE=INNODB;
-ALTER TABLE City ADD COLUMN name varchar(250) NOT NULL;
 
 CREATE TABLE User(
 	id int NOT NULL AUTO_INCREMENT,
@@ -31,8 +33,8 @@ CREATE TABLE Admin(
 	updated_at timestamp,
 	PRIMARY KEY (id),
 	FOREIGN KEY (user_id)
-		REFERENCES User(id)
-		ON DELETE CASCADE
+	REFERENCES User(id)
+	ON DELETE CASCADE
 ) ENGINE=INNODB;
 
 CREATE TABLE Doctor(
@@ -45,8 +47,8 @@ CREATE TABLE Doctor(
 	cost float(4,2) NOT NULL,
 	PRIMARY KEY (ci),
 	FOREIGN KEY (user_id)
-		REFERENCES User(id)
-		ON DELETE CASCADE
+	REFERENCES User(id)
+	ON DELETE CASCADE
 ) ENGINE=INNODB;
 ALTER TABLE Doctor MODIFY COLUMN cost float(6,2) NOT NULL;
 
@@ -58,10 +60,10 @@ CREATE TABLE Patient(
 	lastname varchar(50) NOT NULL,
 	PRIMARY KEY (ci),
 	FOREIGN KEY (user_id)
-		REFERENCES User(id)
-		ON DELETE CASCADE,
+	REFERENCES User(id)
+	ON DELETE CASCADE,
 	FOREIGN KEY (city_id)
-		REFERENCES City(id)
+	REFERENCES City(id)
 ) ENGINE=INNODB;
 
 CREATE TABLE Phone(
@@ -69,8 +71,8 @@ CREATE TABLE Phone(
 	user_id int NOT NULL,
 	PRIMARY KEY (number),
 	FOREIGN KEY (user_id)
-		REFERENCES User(id)
-		ON DELETE CASCADE
+	REFERENCES User(id)
+	ON DELETE CASCADE
 ) ENGINE=INNODB;
 
 CREATE TABLE Speciality(
@@ -84,11 +86,11 @@ CREATE TABLE Specialization(
 	speciality_name varchar(250) NOT NULL,
 	PRIMARY KEY (id),
 	FOREIGN KEY (doctor_ci)
-		REFERENCES Doctor(ci)
-		ON DELETE CASCADE,
+	REFERENCES Doctor(ci)
+	ON DELETE CASCADE,
 	FOREIGN KEY (speciality_name)
-		REFERENCES Speciality(name)
-		ON DELETE CASCADE
+	REFERENCES Speciality(name)
+	ON DELETE CASCADE
 ) ENGINE=INNODB;
 
 CREATE TABLE Appointment(
@@ -97,12 +99,12 @@ CREATE TABLE Appointment(
 	patient_ci varchar(12) NOT NULL,
 	day date NOT NULL,
 	hour time NOT NULL,
+	status varchar(250) NOT NULL,
 	PRIMARY KEY (id),
 	FOREIGN KEY (doctor_ci)
-		REFERENCES Doctor(ci)
-		ON DELETE CASCADE,
+	REFERENCES Doctor(ci)
+	ON DELETE CASCADE,
 	FOREIGN KEY (patient_ci)
-		REFERENCES Patient(ci)
-		ON DELETE CASCADE
+	REFERENCES Patient(ci)
+	ON DELETE CASCADE
 ) ENGINE=INNODB;
-ALTER TABLE Appointment ADD COLUMN status varchar(250) NOT NULL;
