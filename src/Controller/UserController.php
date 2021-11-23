@@ -48,7 +48,7 @@ class UserController {
   {
     $input = (array) json_decode(file_get_contents('php://input'), TRUE);
     if (! $this->validateUser($input)) {
-      return Utils::notFoundResponse();
+      return Utils::unprocessableEntityResponse();
     }
     $user = $this->user_gateway->login($input);
 
@@ -65,7 +65,9 @@ class UserController {
       unset($user['id']);
     }
 
-    $response['status_code_header'] = 'HTTP/1.1 200 OK';
+    $response['status_code_header'] = count($user) > 1 ?
+                                        'HTTP/1.1 200 OK' :
+                                        'HTTP/1.1 422 Unprocessable Entity';
     $response['body'] = json_encode($user, true);
     return $response;
   }
