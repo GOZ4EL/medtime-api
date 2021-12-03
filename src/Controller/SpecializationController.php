@@ -9,16 +9,19 @@ class SpecializationController {
 
   private $db;
   private $request_method;
-  private $specialization_id;
+  private $doctor_ci;
+  private $speciality_name;
 
   private $user_controller;
   private $specialization_gateway;
 
-  public function __construct(\PDO $db, $request_method, $specialization_id)
+  public function __construct(\PDO $db, $request_method,
+                              $doctor_ci = false, $speciality_name = false)
   {
     $this->db = $db;
     $this->request_method = $request_method;
-    $this->specialization_id = $specialization_id;
+    $this->doctor_ci = $doctor_ci;
+    $this->speciality_name = $speciality_name;
 
     $this->specialization_gateway = new SpecializationGateway($db);
     $this->user_controller = new UserController($db);
@@ -28,8 +31,12 @@ class SpecializationController {
   {
     switch ($this->request_method) {
       case 'GET':
-        if ($this->specialization_id) {
-          $response = $this->getSpecialization($this->specialization_id);
+        if ($this->doctor_ci) {
+          $response = $this->getSpecializationByDoctorCI($this->doctor_ci);
+        } else if ($this->speciality_name) {
+          $response = $this->getSpecializationBySpecialityName(
+            $this->speciality_name
+          );
         } else {
           $response = $this->getAllSpecializations();
         };
@@ -62,9 +69,20 @@ class SpecializationController {
     return $response;
   }
 
-  private function getSpecialization($doctor_ci): Array
+  private function getSpecializationByDoctorCI($doctor_ci): Array
   {
-    $result = $this->specialization_gateway->find($doctor_ci);
+    $result = $this->specialization_gateway->findByDoctorCI($doctor_ci);
+    if (! $result) {
+      return Utils::notFoundResponse();
+    }
+    $response['status_code_header'] = 'HTTP/1.1 200 OK';
+    $response['body'] = json_encode($result);
+    return $response;
+  }
+
+  private function getSpecializationBySpecialityName($speciality_name) : Array
+  {
+    $result = $this->specialization_gateway->findBySpecialityName($speciality_name);
     if (! $result) {
       return Utils::notFoundResponse();
     }

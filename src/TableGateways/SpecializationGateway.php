@@ -27,7 +27,7 @@ class SpecializationGateWay {
     }
   }
 
-  public function find($doctor_ci): Array
+  public function findByDoctorCI($doctor_ci): Array
   {
     $statement = "
       SELECT *
@@ -38,6 +38,24 @@ class SpecializationGateWay {
     try {
       $statement = $this->db->prepare($statement);
       $statement->execute(array($doctor_ci));
+      $result = $statement->fetchAll(\PDO::FETCH_ASSOC);
+      return $result;
+    } catch (\PDOException $e) {
+      exit($e->getMessage());
+    }
+  }
+
+  public function findBySpecialityName($speciality_name)
+  {
+    $statement = "
+      SELECT *
+      FROM Specialization
+      WHERE speciality_name = ?;
+    ";
+
+    try {
+      $statement = $this->db->prepare($statement);
+      $statement->execute(array($speciality_name));
       $result = $statement->fetchAll(\PDO::FETCH_ASSOC);
       return $result;
     } catch (\PDOException $e) {
