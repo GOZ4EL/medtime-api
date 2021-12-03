@@ -80,9 +80,13 @@
 	> buscarse todas las especializaciones que tengan como dato
 	> la ci de ese doctor en especifico. Abajo se muestra un endpoint
 	> que da la posibilidad de hacer esto.
-- GET /specialization/[doctor_ci]
+- GET /specialization/doctor/[doctor_ci]
 	> Devuelve como respuesta todas las especializaciones que tengan
 	> como "doctor_ci" la ci que es pasada como parametro por la url.
+- GET /specialization/speciality/[speciality_name]
+	> Devuelve como respuesta todas las especializaciones que tengan
+	> como "speciality_name" el nombre de especialidad que es pasado
+	> como parametro por la url.
 - POST /specialization
 	> Espera en el cuerpo de la peticion los datos "doctor_ci" y
 	> "speciality_name". Devuelve un mensaje de error bajo el nombre
