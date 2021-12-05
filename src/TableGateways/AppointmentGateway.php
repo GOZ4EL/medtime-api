@@ -49,9 +49,9 @@ class AppointmentGateWay {
   {
     $statement = "
       INSERT INTO Appointment
-        (doctor_ci, patient_ci, day, hour)
+        (doctor_ci, patient_ci, day, hour,status)
       VALUES
-        (:doctor_ci, :patient_ci, :day, :hour);
+        (:doctor_ci, :patient_ci, :day, :hour, :status);
     ";
 
     try {
