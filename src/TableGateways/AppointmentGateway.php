@@ -49,9 +49,9 @@ class AppointmentGateWay {
   {
     $statement = "
       INSERT INTO Appointment
-        (doctor_ci, patient_ci, day, hour)
+        (doctor_ci, patient_ci, day, hour,status)
       VALUES
-        (:doctor_ci, :patient_ci, :day, :hour);
+        (:doctor_ci, :patient_ci, :day, :hour, :status);
     ";
 
     try {
@@ -122,7 +122,7 @@ class AppointmentGateWay {
     try {
       $statement = $this->db->prepare($statement);
       $statement->execute(array($doctor_ci));
-      $result = $statement->fetchAll(\PDO::FETCH_ASSOC)[0];
+      $result = $statement->fetchAll(\PDO::FETCH_ASSOC);
       return $result;
     } catch (\PDOException $e) {
       exit($e->getMessage());
@@ -141,7 +141,7 @@ class AppointmentGateWay {
     try {
       $statement = $this->db->prepare($statement);
       $statement->execute(array($patient_ci));
-      $result = $statement->fetchAll(\PDO::FETCH_ASSOC)[0];
+      $result = $statement->fetchAll(\PDO::FETCH_ASSOC);
       return $result;
     } catch (\PDOException $e) {
       exit($e->getMessage());

@@ -48,7 +48,8 @@ switch ($endpoint) {
     $controller = new SpecialityController($db_connection, $request_method, $name);
     break;
   case 'specialization':
-    if (isset($uri[2]) && ! is_numeric($uri[2]) && $uri[2] != '' &&
+    
+    if (!isset($uri[2]) && $uri[2] != '' &&
         (($uri[2] != 'doctor' && $uri[2] != 'speciality') ||
          ! isset($uri[3]))) {
       $response = Utils::notFoundResponse();
@@ -59,14 +60,17 @@ switch ($endpoint) {
 
     $doctor_ci = false;
     $speciality_name = false;
+    $specialization_id = false;
 
-    if (isset($uri[2]) && strtolower($uri[2]) === 'doctor') {
+    if (isset($uri[2]) && is_numeric($uri[2])){
+      $specialization_id = $uri[2];
+    }else if (isset($uri[2]) && strtolower($uri[2]) === 'doctor') {
       $doctor_ci = $uri[3];
     } else if (isset($uri[2]) && strtolower($uri[2]) === 'speciality') {
       $speciality_name = $uri[3];
     }
     $controller = new SpecializationController($db_connection, $request_method, 
-                                               $doctor_ci, $speciality_name);
+                                               $doctor_ci, $speciality_name,$specialization_id);
     break;
   case 'appointment':
     $id = null;

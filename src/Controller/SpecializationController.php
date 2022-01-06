@@ -16,12 +16,13 @@ class SpecializationController {
   private $specialization_gateway;
 
   public function __construct(\PDO $db, $request_method,
-                              $doctor_ci = false, $speciality_name = false)
+                              $doctor_ci = false, $speciality_name = false, $specialization_id = false)
   {
     $this->db = $db;
     $this->request_method = $request_method;
     $this->doctor_ci = $doctor_ci;
     $this->speciality_name = $speciality_name;
+    $this->specialization_id = $specialization_id;
 
     $this->specialization_gateway = new SpecializationGateway($db);
     $this->user_controller = new UserController($db);
@@ -111,13 +112,13 @@ class SpecializationController {
     return $response;
   }
 
-  private function deleteSpecialization($ci) 
+  private function deleteSpecialization($id) 
   {
-    $result = $this->specialization_gateway->find($ci);
-    if (! $result) {
+    $correct = $this->specialization_gateway->delete($id);
+    if ( $correct == 0) {
       return Utils::notFoundResponse();
     }
-    $this->specialization_gateway->delete($ci);
+    
     $response['status_code_header'] = 'HTTP/1.1 200 OK';
     $response['body'] = json_encode([
       'message' => 'Specialization deleted successfully'
