@@ -1,6 +1,14 @@
 
 # MEDTIME API
 
+start server:
+`$ php -S 127.0.0.1:8000 -t public`
+
+DB at:
+`$ /db/database.sql`
+and
+`$ /db/cities_and_states.sql`
+
 ### A REST-API that serves as backend of an app for making medical appointments
 
 ## Endpoints
