@@ -49,9 +49,9 @@ class DoctorGateWay {
   {
     $statement = "
       INSERT INTO Doctor
-        (ci, user_id, firstname, lastname, starts_at, ends_at, cost)
+        (ci, user_id, firstname, lastname, starts_at, ends_at, cost, image)
       VALUES
-        (:ci, :user_id, :firstname, :lastname, :starts_at, :ends_at, :cost);
+        (:ci, :user_id, :firstname, :lastname, :starts_at, :ends_at, :cost, :image);
     ";
 
     try {
@@ -64,6 +64,7 @@ class DoctorGateWay {
         'starts_at' => $input['starts_at'],
         'ends_at' => $input['ends_at'],
         'cost' => $input['cost'],
+        'image' => $input['image'],
       ));
       return $statement->rowCount();
     } catch (\PDOException $e) {
@@ -80,7 +81,8 @@ class DoctorGateWay {
         lastname = :lastname,
         starts_at = :starts_at,
         ends_at = :ends_at,
-        cost = :cost
+        cost = :cost,
+        image = :image
       WHERE ci = :ci;
     ";
 
@@ -93,6 +95,7 @@ class DoctorGateWay {
         'starts_at' => $input['starts_at'],
         'ends_at' => $input['ends_at'],
         'cost' => $input['cost'],
+        'image' => $input['image'],
       ));
       return $statement->rowCount();
     } catch (\PDOException $e) {

@@ -97,6 +97,7 @@ class DoctorController {
       'starts_at' => $input['starts_at'],
       'ends_at' => $input['ends_at'],
       'cost' => $input['cost'],
+      'image' => $input['image'],
     );
 
     $this->doctor_gateway->insert($doctor_input, $user_id);

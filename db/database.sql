@@ -45,6 +45,7 @@ CREATE TABLE Doctor(
 	starts_at time NOT NULL,
 	ends_at time NOT NULL,
 	cost float(4,2) NOT NULL,
+	image BLOB NOT NULL,
 	PRIMARY KEY (ci),
 	FOREIGN KEY (user_id)
 	REFERENCES User(id)
