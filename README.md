@@ -33,7 +33,9 @@ and
 	> "lastname", "ci" (campo numerico que debe tener 6 o mas caracteres),
 	> "password" (campo alfanumerico que debe tener 8 o mas caracteres),
 	> "role" (cuyo valor debe ser "doctor"), "starts_at" (campo con formato
-	> tipo DATE de SQL), "ends_at" (campo con formato tipo DATE de SQL) y
+	> tipo DATE de SQL), "ends_at" (campo con formato tipo DATE de SQL),
+	> "image" (cuyo valor debe ser un string base64 que representa los
+	> datos de la imagen de perfil del doctor) y
 	> "cost" (un numero real); y devuelve como respuesta un mensaje bajo
 	> el nombre de: "message" si la peticion fue realizada satisfactoriamente o
 	> "error" si hubo alguna especie de error.
