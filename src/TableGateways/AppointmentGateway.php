@@ -15,7 +15,7 @@ class AppointmentGateWay {
     $statement = "
       SELECT *
       FROM Appointment
-        ORDER BY id DESC;
+      ORDER BY day ASC;
     ";
 
     try {
@@ -116,7 +116,7 @@ class AppointmentGateWay {
     $statement = "
       SELECT *
       FROM Appointment
-      WHERE doctor_ci = ?;
+      WHERE doctor_ci = ? ORDER BY day ASC;
     ";
 
     try {
@@ -135,7 +135,7 @@ class AppointmentGateWay {
     $statement = "
       SELECT *
       FROM Appointment
-      WHERE patient_ci = ?;
+      WHERE patient_ci = ? ORDER BY day ASC;
     ";
 
     try {
