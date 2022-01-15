@@ -8,6 +8,7 @@ use Src\Controller\SpecialityController;
 use Src\Controller\SpecializationController;
 use Src\Controller\AppointmentController;
 use Src\Controller\AddressController;
+use Src\Controller\AdminController;
 
 header("Access-Control-Allow-Origin: *");
 header("Content-Type: application/json; charset=UTF-8");
@@ -48,7 +49,6 @@ switch ($endpoint) {
     $controller = new SpecialityController($db_connection, $request_method, $name);
     break;
   case 'specialization':
-    
     if (!isset($uri[2]) && $uri[2] != '' &&
         (($uri[2] != 'doctor' && $uri[2] != 'speciality') ||
          ! isset($uri[3]))) {
@@ -101,6 +101,16 @@ switch ($endpoint) {
   case 'address':
     $city_id = isset($uri[2]) ? $uri[2] : null;
     $controller = new AddressController($db_connection, $request_method, $city_id);
+    break;
+  case 'admin':
+    if (!isset($uri[2]) || $uri[2] != 'reports') {
+      header("HTTP/1.1 404 Not Found");
+      echo json_encode(array(
+        'error' => 'Invalid path'
+      ));
+      exit();
+    }
+    $controller = new AdminController($db_connection, $request_method);
     break;
   default:
     header("HTTP/1.1 404 Not Found");

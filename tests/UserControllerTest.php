@@ -72,6 +72,7 @@ class UserControllerTest extends \PHPUnit\Framework\TestCase
       )]
     );
     $data = json_decode($response->getBody(true), true);
+    var_dump($data);
     $this->assertArrayHasKey('jwt', $data);
   }
 
