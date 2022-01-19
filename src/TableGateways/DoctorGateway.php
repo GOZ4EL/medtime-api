@@ -15,7 +15,7 @@ class DoctorGateWay {
     $statement = "
       SELECT *
       FROM Doctor
-        ORDER BY user_id;
+        ORDER BY firstname asc;
     ";
 
     try {
