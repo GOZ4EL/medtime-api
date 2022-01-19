@@ -11,11 +11,6 @@ class Reports {
     $this->db = $db;
   }
 
-  public function countAllDoctors() {
-    $query = "COUNT(SELECT * FROM Doctor);";
-    
-  }
-
   public function showReport() {
     $pdf = new PDF(); 
     $pdf->AliasNbPages();
@@ -26,17 +21,20 @@ class Reports {
     $pdf->Ln(12.5);
 
     $statement = "
-      SELECT a.name AS especialidad, COUNT(b.id) AS total
-      FROM Speciality a
-        JOIN Specialization b ON
-          a.name=b.speciality_name";
+      SELECT 
+        CONCAT(d.firstname, ' ', d.lastname) AS doctor,
+        s.speciality_name AS especialidad
+      FROM Specialization s
+        JOIN Doctor d
+          ON s.doctor_ci=d.ci
+    ";
     $statement = $this->db->query($statement);
     $result = $statement->fetchAll(\PDO::FETCH_ASSOC);
-    $pdf->cell(195, 10, 'Total de doctores en cada especialidad', 0, 1, 'C', 0);
+    $pdf->cell(195, 10, 'Doctores por Especialidad', 0, 1, 'C', 0);
     
     foreach($result as $key => $value) {
       $pdf->Cell(95, 10, $value['especialidad'], 1, 0, 'C', 0);
-      $pdf->Cell(95, 10, $value['total'], 1, 1, 'C', 0);
+      $pdf->Cell(95, 10, $value['doctor'], 1, 1, 'C', 0);
     }
     $pdf->Ln(10);
 
